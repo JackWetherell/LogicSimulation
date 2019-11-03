@@ -19,9 +19,9 @@ class BUFF(core.Component):
                 self.output[i].value = input.value
 
 
-class AND(core.Component, count=2):
+class AND(core.Component):
     '''And gate'''
-    def __init__(self):
+    def __init__(self, count=2):
         super().__init__()
         self.add_inputs(count=count)
         self.add_outputs(count=1)
@@ -30,13 +30,13 @@ class AND(core.Component, count=2):
     def evaluate(self):
         '''Definition of and evaluation'''
         temp = list(map(lambda input: input.value, self.inputs))
-        self.outputs[0] = all([False if t==None else t for t in temp]) # interpret None as False
+        self.outputs[0].value = all([False if t==None else t for t in temp]) # interpret None as False
         del temp
 
 
-class Or(core.Component, count=2):
+class OR(core.Component):
     '''Or gate'''
-    def __init__(self):
+    def __init__(self, count=2):
         super().__init__()
         self.add_inputs(count=count)
         self.add_outputs(count=1)
@@ -45,11 +45,11 @@ class Or(core.Component, count=2):
     def evaluate(self):
         '''Definition of or evaluation'''
         temp = list(map(lambda input: input.value, self.inputs))
-        self.outputs[0] = any([False if t==None else t for t in temp]) # interpret None as False
+        self.outputs[0].value = any([False if t==None else t for t in temp]) # interpret None as False
         del temp
 
 
-class Not(core.Component):
+class NOT(core.Component):
     '''Not gate'''
     def __init__(self, count=1):
         super().__init__()

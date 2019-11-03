@@ -106,7 +106,7 @@ class Component:
         if isinstance(self.connections[index].start_point, Input):
             self.connections[index].value = self.connections[index].start_point.value
         if isinstance(self.connections[index].start_point, Component):
-            self.connections[index].value = self.connections[index].start_point.outputs[self.connections[start_index]].value
+            self.connections[index].value = self.connections[index].start_point.outputs[self.connections[index].start_index].value
         if isinstance(self.connections[index].start_point, Output):
             raise ComponentException('cannot evaluate a connection whose start_point is of type Output')
 
@@ -114,11 +114,11 @@ class Component:
         if isinstance(self.connections[index].end_point, Input):
             raise ComponentException('cannot evaluate a connection whose end_point is of type Input')
         if isinstance(self.connections[index].end_point, Component):
-            self.connections[index].end_point.inputs[end_index].value = self.connections[index].value
+            self.connections[index].end_point.inputs[self.connections[index].end_index].value = self.connections[index].value
             self.connections[index].end_point.evaluate()
             for output in self.connections[index].end_point.outputs:
                 for connection_index in output.connection_indices:
-                    self._evaluate_connection[connection_index]
+                    self._evaluate_connection(connection_index)
         if isinstance(self.connections[index].end_point, Output):
             self.connections[index].end_point.value = self.connections[index].value
             return
@@ -127,6 +127,7 @@ class Component:
 
     def _set_checkpoint(self):
         '''private: set the checkpoint to the current state of the component'''
+        self.checkpoint = Container()
         self.checkpoint.inputs = list(map(lambda i: i.value, self.inputs))
         self.checkpoint.connections = list(map(lambda c: c.value, self.connections))
 

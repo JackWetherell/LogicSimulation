@@ -1,0 +1,1 @@
+'''A python library to enable the simulation of large logic gate circuits with strong emphasis on abstraction.'''
